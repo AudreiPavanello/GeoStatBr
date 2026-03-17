@@ -1,0 +1,20 @@
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Claude
+.claude
+
+# jamovi build artifacts (auto-generated — do not commit)
+geostat/*.jmo
+geostat/build/
+geostat/inst/
+geostat/R/*.h.R
+geostat/jamovi/*.src.js
+geostat/jamovi/*.js
+geostat/jamovi/jamovi.yaml
+geostat/jamovi/jamovi-full.yaml
+geostat/temp/
