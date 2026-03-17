@@ -79,8 +79,35 @@
         )
     }
 
-    # Merge: keep all shapefile rows (left join)
-    merged <- merge(shp, data, by.x = id_col, by.y = join_col, all.x = TRUE)
+    # Merge: keep all shapefile rows (left join).
+    # Detach geometry first so base merge() cannot drop the sf class,
+    # then reattach it explicitly.
+    shp_geom  <- sf::st_geometry(shp)
+    shp_df    <- sf::st_drop_geometry(shp)
+    data_df   <- as.data.frame(data)
+
+    # Deduplicate data by join column: duplicate codes would produce extra rows
+    # after merge(), making nrow(merged_df) > length(shp_geom) and crashing
+    # sf::st_set_geometry().
+    dup_mask <- duplicated(data_df[[join_col]])
+    if (any(dup_mask)) {
+        n_dup <- sum(dup_mask)
+        warning(
+            n_dup, " duplicate region code(s) found in column '", join_col,
+            "'. Only the first occurrence of each code will be used."
+        )
+        data_df <- data_df[!dup_mask, , drop = FALSE]
+    }
+
+    merged_df <- merge(shp_df, data_df, by.x = id_col, by.y = join_col, all.x = TRUE, sort = FALSE)
+
+    # Restore original shapefile row order: merge() may reorder rows, which
+    # would misalign geometries even when row counts match.
+    row_order <- match(shp_df[[id_col]], merged_df[[id_col]])
+    merged_df <- merged_df[row_order, , drop = FALSE]
+    rownames(merged_df) <- NULL
+
+    merged    <- sf::st_set_geometry(merged_df, shp_geom)
     merged
 }
 

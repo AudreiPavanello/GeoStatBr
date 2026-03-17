@@ -79,12 +79,15 @@ morantestClass <- R6::R6Class(
             )
 
             # Populate results table
+            # mtest$statistic        = Z-score (standard deviate)
+            # mtest$estimate names   = "Moran I statistic", "Expectation", "Variance"
             table <- self$results$testTable
-            table$setRow(
-                rowNo = 1,
+            table$deleteRows()
+            table$addRow(
+                rowKey = 1,
                 values = list(
-                    statistic  = unname(mtest$statistic),
-                    expected   = unname(mtest$estimate["Expected I"]),
+                    statistic  = unname(mtest$estimate["Moran I statistic"]),
+                    expected   = unname(mtest$estimate["Expectation"]),
                     variance   = unname(mtest$estimate["Variance"]),
                     stdDeviate = unname(mtest$statistic),
                     pvalue     = mtest$p.value
@@ -92,7 +95,7 @@ morantestClass <- R6::R6Class(
             )
 
             # Build interpretation HTML
-            i_val   <- unname(mtest$statistic)
+            i_val   <- unname(mtest$estimate["Moran I statistic"])
             p_val   <- mtest$p.value
             alt_lab <- switch(self$options$alternative,
                 two.sided = "two-sided",

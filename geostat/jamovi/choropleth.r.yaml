@@ -15,7 +15,6 @@ items:
           - var
           - joinVar
           - geoLevel
-          - palette
           - classMethod
           - nClasses
           - mapTitle

@@ -143,16 +143,28 @@ localmorantestClass <- R6::R6Class(
             )
             self$results$interpretation$setContent(html)
 
-            # Cache for render functions
-            shp_complete[["..lisa_local_i"]] <- local_i
-            shp_complete[["..lisa_z"]]       <- z_scores
-            shp_complete[["..lisa_pvalue"]]  <- pvals
-            shp_complete[["..lisa_cluster"]] <- factor(
-                cluster_cat,
+            # Cache for render functions — build full-length vectors first,
+            # then assign via [[<- only (avoids [<-.sf row-subset shrinkage)
+            n_full       <- nrow(shp_joined)
+            li_full      <- rep(NA_real_, n_full)
+            z_full       <- rep(NA_real_, n_full)
+            pv_full      <- rep(NA_real_, n_full)
+            cluster_full <- rep(NA_character_, n_full)
+
+            li_full[complete_idx]      <- local_i
+            z_full[complete_idx]       <- z_scores
+            pv_full[complete_idx]      <- pvals
+            cluster_full[complete_idx] <- cluster_cat
+
+            shp_joined[["..lisa_local_i"]] <- li_full
+            shp_joined[["..lisa_z"]]       <- z_full
+            shp_joined[["..lisa_pvalue"]]  <- pv_full
+            shp_joined[["..lisa_cluster"]] <- factor(
+                cluster_full,
                 levels = c("High-High", "Low-Low", "High-Low", "Low-High", "Not Significant")
             )
 
-            private$.lisa_shp  <- shp_complete
+            private$.lisa_shp  <- shp_joined   # full Paraná; non-data municipalities are NA (grey)
             private$.lisa_df   <- data.frame(
                 cluster = cluster_cat,
                 pvalue  = pvals
@@ -166,30 +178,24 @@ localmorantestClass <- R6::R6Class(
 
             shp      <- private$.lisa_shp
             var_name <- private$.var_name
-            sig_thr  <- .sig_level_value(self$options$sigLevel)
+            colors   <- .lisa_colors[levels(shp[["..lisa_cluster"]])]
 
-            tmap::tmap_mode("plot")
-
-            # Build color vector matching factor levels — HARDCODED, no auto-coloring
-            levels_present <- levels(shp[["..lisa_cluster"]])
-            colors <- .lisa_colors[levels_present]
-
-            map <- tmap::tm_shape(shp) +
-                tmap::tm_polygons(
-                    col          = "..lisa_cluster",
-                    palette      = colors,
-                    title        = "Cluster Type",
-                    border.col   = "white",
-                    border.alpha = 0.4
-                ) +
-                tmap::tm_layout(
-                    title          = paste0("LISA Cluster Map — ", var_name),
-                    title.position = c("center", "top"),
-                    legend.outside = TRUE,
-                    frame          = FALSE
+            p <- ggplot2::ggplot(shp) +
+                ggplot2::geom_sf(ggplot2::aes(fill = .data[["..lisa_cluster"]]),
+                                 color = "white", linewidth = 0.15) +
+                ggplot2::scale_fill_manual(values       = colors,
+                                           name         = "Cluster Type",
+                                           na.value     = "#cccccc",
+                                           na.translate = FALSE,
+                                           drop         = FALSE) +
+                ggplot2::labs(title = paste0("LISA Cluster Map \u2014 ", var_name)) +
+                ggplot2::theme_void() +
+                ggplot2::theme(
+                    plot.title      = ggplot2::element_text(hjust = 0.5, size = 12),
+                    legend.position = "right"
                 )
 
-            print(map)
+            print(p)
             TRUE
         },
 
@@ -200,17 +206,14 @@ localmorantestClass <- R6::R6Class(
             shp      <- private$.lisa_shp
             var_name <- private$.var_name
 
-            # Categorize p-values into significance bands
-            pvals <- shp[["..lisa_pvalue"]]
+            pvals    <- shp[["..lisa_pvalue"]]
             sig_band <- cut(
                 pvals,
                 breaks = c(-Inf, 0.001, 0.01, 0.05, 1),
                 labels = c("p < 0.001", "p < 0.01", "p < 0.05", "Not Significant"),
                 right  = TRUE
             )
-            shp[["..sig_band"]] <- sig_band
-
-            tmap::tmap_mode("plot")
+            shp[["sig_band"]] <- sig_band
 
             sig_colors <- c(
                 "p < 0.001"       = "#08306b",
@@ -218,26 +221,24 @@ localmorantestClass <- R6::R6Class(
                 "p < 0.05"        = "#6baed6",
                 "Not Significant" = "#cccccc"
             )
+            colors <- sig_colors[levels(droplevels(sig_band))]
 
-            levels_present <- levels(droplevels(sig_band))
-            colors <- sig_colors[levels_present]
-
-            map <- tmap::tm_shape(shp) +
-                tmap::tm_polygons(
-                    col          = "..sig_band",
-                    palette      = colors,
-                    title        = "Significance",
-                    border.col   = "white",
-                    border.alpha = 0.4
-                ) +
-                tmap::tm_layout(
-                    title          = paste0("LISA Significance Map — ", var_name),
-                    title.position = c("center", "top"),
-                    legend.outside = TRUE,
-                    frame          = FALSE
+            p <- ggplot2::ggplot(shp) +
+                ggplot2::geom_sf(ggplot2::aes(fill = sig_band),
+                                 color = "white", linewidth = 0.15) +
+                ggplot2::scale_fill_manual(values       = colors,
+                                           name         = "Significance",
+                                           na.value     = "#cccccc",
+                                           na.translate = FALSE,
+                                           drop         = TRUE) +
+                ggplot2::labs(title = paste0("LISA Significance Map \u2014 ", var_name)) +
+                ggplot2::theme_void() +
+                ggplot2::theme(
+                    plot.title      = ggplot2::element_text(hjust = 0.5, size = 12),
+                    legend.position = "right"
                 )
 
-            print(map)
+            print(p)
             TRUE
         }
     )

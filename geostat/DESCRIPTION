@@ -14,11 +14,10 @@ Imports:
     R6,
     sf (>= 1.0.0),
     spdep (>= 1.2.0),
-    tmap (>= 3.3),
     ggplot2 (>= 3.4.0),
-    dplyr (>= 1.1.0),
     RColorBrewer,
-    viridis
+    classInt,
+    proxy
 Suggests:
     geobr,
     usethis,

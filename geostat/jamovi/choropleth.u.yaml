@@ -45,11 +45,6 @@ children:
                 optionPart: mun_pr
                 label: Paraná Municipalities
           - type: Label
-            label: Color Palette
-            children:
-              - type: ComboBox
-                name: palette
-          - type: Label
             label: Classification Method
             children:
               - type: ComboBox

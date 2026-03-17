@@ -40,12 +40,14 @@ choroplethClass <- R6::R6Class(
             )
 
             shp_joined <- tryCatch(
-                .join_data_to_shape(shp, data, join_name),
-                error = function(e) stop(e$message),
-                warning = function(w) {
-                    message(w$message)
-                    .join_data_to_shape(shp, data, join_name)
-                }
+                withCallingHandlers(
+                    .join_data_to_shape(shp, data, join_name),
+                    warning = function(w) {
+                        message(w$message)
+                        invokeRestart("muffleWarning")
+                    }
+                ),
+                error = function(e) stop(e$message)
             )
 
             # Cache for render function
@@ -65,6 +67,8 @@ choroplethClass <- R6::R6Class(
                 sd       = {
                     m <- mean(vals, na.rm = TRUE)
                     s <- stats::sd(vals, na.rm = TRUE)
+                    if (is.na(s) || s == 0)
+                        stop("Standard deviation classification requires non-constant values.")
                     seq(m - 3 * s, m + 3 * s, length.out = n_classes + 1)
                 },
                 jenks    = {
@@ -78,6 +82,8 @@ choroplethClass <- R6::R6Class(
                 }
             )
             breaks <- unique(breaks)
+            if (length(breaks) < 2)
+                stop("Not enough distinct values to create ", n_classes, " classes. Try fewer classes or a different classification method.")
             classes <- as.integer(cut(vals, breaks = breaks, include.lowest = TRUE))
 
             region_names <- if (name_col %in% names(shp_joined)) {
@@ -86,15 +92,20 @@ choroplethClass <- R6::R6Class(
                 as.character(seq_len(nrow(shp_joined)))
             }
 
+            data_idx       <- !is.na(vals)
+            region_names_d <- region_names[data_idx]
+            vals_d         <- vals[data_idx]
+            classes_d      <- classes[data_idx]
+
             table <- self$results$summary
             table$deleteRows()
-            for (i in seq_along(region_names)) {
+            for (i in seq_along(region_names_d)) {
                 table$addRow(
                     rowKey = i,
                     values = list(
-                        region = region_names[i],
-                        value  = if (is.na(vals[i])) NA_real_ else vals[i],
-                        class  = if (is.na(classes[i])) NA_integer_ else classes[i]
+                        region = region_names_d[i],
+                        value  = vals_d[i],
+                        class  = if (is.na(classes_d[i])) NA_integer_ else classes_d[i]
                     )
                 )
             }
@@ -104,13 +115,13 @@ choroplethClass <- R6::R6Class(
             if (is.null(private$.shp_data))
                 return(FALSE)
 
-            var_name <- self$options$var
-            shp      <- private$.shp_data
+            var_name   <- self$options$var
+            shp        <- private$.shp_data
 
             if (!var_name %in% names(shp))
                 return(FALSE)
 
-            pal_name   <- self$options$palette
+            pal_name   <- "YlOrRd"
             n_classes  <- self$options$nClasses
             cls_method <- self$options$classMethod
             map_title  <- self$options$mapTitle
@@ -118,36 +129,56 @@ choroplethClass <- R6::R6Class(
             if (nchar(trimws(map_title)) == 0)
                 map_title <- var_name
 
-            # tmap v3 API (pinned < 4.0)
-            tmap::tmap_mode("plot")
+            vals <- shp[[var_name]]
 
-            # Build palette
+            # Compute class breaks
+            breaks <- switch(cls_method,
+                quantile = stats::quantile(vals, probs = seq(0, 1, length.out = n_classes + 1), na.rm = TRUE),
+                equal    = seq(min(vals, na.rm = TRUE), max(vals, na.rm = TRUE), length.out = n_classes + 1),
+                sd       = {
+                    m <- mean(vals, na.rm = TRUE)
+                    s <- stats::sd(vals, na.rm = TRUE)
+                    if (is.na(s) || s == 0) return(FALSE)
+                    seq(m - 3 * s, m + 3 * s, length.out = n_classes + 1)
+                },
+                jenks    = {
+                    if (requireNamespace("classInt", quietly = TRUE)) {
+                        ci <- classInt::classIntervals(vals[!is.na(vals)], n_classes, style = "jenks")
+                        ci$brks
+                    } else {
+                        stats::quantile(vals, probs = seq(0, 1, length.out = n_classes + 1), na.rm = TRUE)
+                    }
+                }
+            )
+            breaks <- unique(breaks)
+            if (length(breaks) < 2) return(FALSE)
+            shp[["map_class"]] <- cut(vals, breaks = breaks, include.lowest = TRUE)
+
+            # Build colour palette (no tmap/viridis dependency)
             if (pal_name == "viridis") {
-                pal <- viridis::viridis(n_classes)
+                pal <- grDevices::hcl.colors(n_classes, palette = "viridis")
             } else {
-                pal <- RColorBrewer::brewer.pal(max(3, n_classes), pal_name)
+                max_col <- RColorBrewer::brewer.pal.info[pal_name, "maxcolors"]
+                pal     <- RColorBrewer::brewer.pal(min(max_col, max(3, n_classes)), pal_name)
+                if (n_classes > length(pal))
+                    pal <- grDevices::colorRampPalette(pal)(n_classes)
             }
 
-            map <- tmap::tm_shape(shp) +
-                tmap::tm_polygons(
-                    col      = var_name,
-                    palette  = pal,
-                    n        = n_classes,
-                    style    = cls_method,
-                    title    = var_name,
-                    border.col = "white",
-                    border.alpha = 0.5
-                ) +
-                tmap::tm_layout(
-                    title          = map_title,
-                    title.position = c("center", "top"),
-                    legend.outside = TRUE,
-                    frame          = FALSE
-                ) +
-                tmap::tm_compass(type = "arrow", position = c("right", "bottom")) +
-                tmap::tm_scale_bar(position = c("left", "bottom"))
+            p <- ggplot2::ggplot(shp) +
+                ggplot2::geom_sf(ggplot2::aes(fill = map_class),
+                                 color = "white", linewidth = 0.15) +
+                ggplot2::scale_fill_manual(values   = pal,
+                                           name     = var_name,
+                                           na.value = "#cccccc",
+                                           drop     = FALSE) +
+                ggplot2::labs(title = map_title) +
+                ggplot2::theme_void() +
+                ggplot2::theme(
+                    plot.title      = ggplot2::element_text(hjust = 0.5, size = 12),
+                    legend.position = "right"
+                )
 
-            print(map)
+            print(p)
             TRUE
         }
     )

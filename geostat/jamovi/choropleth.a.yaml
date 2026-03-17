@@ -48,22 +48,6 @@ options:
             name: mun_pr
       default: states
 
-    - name: palette
-      title: Color Palette
-      type: List
-      options:
-          - title: Yellow-Orange-Red
-            name: YlOrRd
-          - title: Blues
-            name: Blues
-          - title: Reds
-            name: Reds
-          - title: Red-Blue (diverging)
-            name: RdBu
-          - title: Viridis
-            name: viridis
-      default: YlOrRd
-
     - name: classMethod
       title: Classification Method
       type: List
