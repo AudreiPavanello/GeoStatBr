@@ -3,16 +3,26 @@
 
 #' Load the appropriate built-in shapefile
 #'
-#' @param level Character. One of "states" or "mun_pr".
+#' @param level Character. One of "states", "mun_pr", or "mun_<abbrev>" for
+#'   any Brazilian state abbreviation (e.g., "mun_sp", "mun_mg").
 #' @return An sf object with IBGE region codes in the appropriate column.
 .load_builtin_shapefile <- function(level) {
     if (level == "states") {
         shp <- geostat::brazil_states
-        attr(shp, "id_col") <- "code_state"
+        attr(shp, "id_col")   <- "code_state"
         attr(shp, "name_col") <- "name_state"
     } else if (level == "mun_pr") {
+        # kept for backward compatibility
         shp <- geostat::brazil_municipalities_pr
-        attr(shp, "id_col") <- "code_muni"
+        attr(shp, "id_col")   <- "code_muni"
+        attr(shp, "name_col") <- "name_muni"
+    } else if (startsWith(level, "mun_")) {
+        state_abbrev <- toupper(substr(level, 5, nchar(level)))
+        all_mun      <- geostat::brazil_municipalities_all
+        shp          <- all_mun[all_mun$abbrev_state == state_abbrev, ]
+        if (nrow(shp) == 0)
+            stop("No municipalities found for state: ", state_abbrev)
+        attr(shp, "id_col")   <- "code_muni"
         attr(shp, "name_col") <- "name_muni"
     } else {
         stop("Unknown geographic level: ", level)

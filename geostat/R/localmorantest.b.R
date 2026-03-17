@@ -182,7 +182,7 @@ localmorantestClass <- R6::R6Class(
 
             p <- ggplot2::ggplot(shp) +
                 ggplot2::geom_sf(ggplot2::aes(fill = .data[["..lisa_cluster"]]),
-                                 color = "white", linewidth = 0.15) +
+                                 color = "gray70", linewidth = 0.15) +
                 ggplot2::scale_fill_manual(values       = colors,
                                            name         = "Cluster Type",
                                            na.value     = "#cccccc",
@@ -225,7 +225,7 @@ localmorantestClass <- R6::R6Class(
 
             p <- ggplot2::ggplot(shp) +
                 ggplot2::geom_sf(ggplot2::aes(fill = sig_band),
-                                 color = "white", linewidth = 0.15) +
+                                 color = "gray70", linewidth = 0.15) +
                 ggplot2::scale_fill_manual(values       = colors,
                                            name         = "Significance",
                                            na.value     = "#cccccc",

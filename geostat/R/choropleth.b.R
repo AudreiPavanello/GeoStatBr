@@ -166,7 +166,7 @@ choroplethClass <- R6::R6Class(
 
             p <- ggplot2::ggplot(shp) +
                 ggplot2::geom_sf(ggplot2::aes(fill = map_class),
-                                 color = "white", linewidth = 0.15) +
+                                 color = "gray70", linewidth = 0.15) +
                 ggplot2::scale_fill_manual(values   = pal,
                                            name     = var_name,
                                            na.value = "#cccccc",

@@ -42,8 +42,60 @@ options:
       options:
           - title: Brazilian States
             name: states
+          - title: "Acre Municipalities"
+            name: mun_ac
+          - title: "Alagoas Municipalities"
+            name: mun_al
+          - title: "Amapá Municipalities"
+            name: mun_ap
+          - title: "Amazonas Municipalities"
+            name: mun_am
+          - title: "Bahia Municipalities"
+            name: mun_ba
+          - title: "Ceará Municipalities"
+            name: mun_ce
+          - title: "Distrito Federal Municipalities"
+            name: mun_df
+          - title: "Espírito Santo Municipalities"
+            name: mun_es
+          - title: "Goiás Municipalities"
+            name: mun_go
+          - title: "Maranhão Municipalities"
+            name: mun_ma
+          - title: "Mato Grosso Municipalities"
+            name: mun_mt
+          - title: "Mato Grosso do Sul Municipalities"
+            name: mun_ms
+          - title: "Minas Gerais Municipalities"
+            name: mun_mg
+          - title: "Pará Municipalities"
+            name: mun_pa
+          - title: "Paraíba Municipalities"
+            name: mun_pb
           - title: "Paraná Municipalities"
             name: mun_pr
+          - title: "Pernambuco Municipalities"
+            name: mun_pe
+          - title: "Piauí Municipalities"
+            name: mun_pi
+          - title: "Rio de Janeiro Municipalities"
+            name: mun_rj
+          - title: "Rio Grande do Norte Municipalities"
+            name: mun_rn
+          - title: "Rio Grande do Sul Municipalities"
+            name: mun_rs
+          - title: "Rondônia Municipalities"
+            name: mun_ro
+          - title: "Roraima Municipalities"
+            name: mun_rr
+          - title: "Santa Catarina Municipalities"
+            name: mun_sc
+          - title: "São Paulo Municipalities"
+            name: mun_sp
+          - title: "Sergipe Municipalities"
+            name: mun_se
+          - title: "Tocantins Municipalities"
+            name: mun_to
       default: states
 
     - name: weightsType

@@ -34,16 +34,8 @@ children:
           - type: Label
             label: Geographic Level
             children:
-              - type: RadioButton
-                name: geoLevel_states
-                optionName: geoLevel
-                optionPart: states
-                label: Brazilian States
-              - type: RadioButton
-                name: geoLevel_mun_pr
-                optionName: geoLevel
-                optionPart: mun_pr
-                label: Paraná Municipalities
+              - type: ComboBox
+                name: geoLevel
           - type: Label
             label: Spatial Weights
             children:

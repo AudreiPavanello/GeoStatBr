@@ -66,7 +66,21 @@ message("  Saved data/brazil_municipalities_pr.rda (",
         nrow(brazil_municipalities_pr), " features)")
 
 # -----------------------------------------------------------------------------
-# 3. Synthesize state-level health indicators with spatial autocorrelation
+# 3. All Brazilian municipalities (all 27 states)
+# -----------------------------------------------------------------------------
+message("Downloading all Brazilian municipalities shapefile (this may take a minute)...")
+brazil_municipalities_all <- geobr::read_municipality(code_muni = "all", year = 2020)
+brazil_municipalities_all <- sf::st_transform(brazil_municipalities_all, crs = 4326)
+brazil_municipalities_all <- brazil_municipalities_all[,
+    c("code_muni", "name_muni", "code_state", "abbrev_state", "geom")]
+
+save(brazil_municipalities_all,
+     file = file.path(.data_dir, "brazil_municipalities_all.rda"), compress = "xz")
+message("  Saved data/brazil_municipalities_all.rda (",
+        nrow(brazil_municipalities_all), " features)")
+
+# -----------------------------------------------------------------------------
+# 5. Synthesize state-level health indicators with spatial autocorrelation
 # -----------------------------------------------------------------------------
 message("Synthesizing state-level health data...")
 
@@ -118,7 +132,7 @@ save(brazil_health_states,
 message("  Saved data/brazil_health_states.rda (", nrow(brazil_health_states), " rows)")
 
 # -----------------------------------------------------------------------------
-# 4. Synthesize Paraná municipality health indicators
+# 6. Synthesize Paraná municipality health indicators
 # -----------------------------------------------------------------------------
 message("Synthesizing Paraná municipality health data...")
 
