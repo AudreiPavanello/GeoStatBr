@@ -1,0 +1,64 @@
+---
+name: morantest
+title: Global Moran's I
+jrs: '1.1'
+
+items:
+    - name: testTable
+      title: "Global Moran's I Test"
+      type: Table
+      description: Moran's I statistic and hypothesis test results.
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - alternative
+      columns:
+          - name: statistic
+            title: Moran's I
+            type: number
+            format: zto,dp:4
+          - name: expected
+            title: Expected I
+            type: number
+            format: zto,dp:4
+          - name: variance
+            title: Variance
+            type: number
+            format: zto,dp:6
+          - name: stdDeviate
+            title: Std. Deviate
+            type: number
+            format: zto,dp:4
+          - name: pvalue
+            title: p-value
+            type: number
+            format: zto,pvalue
+
+    - name: interpretation
+      title: Interpretation
+      type: Html
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - alternative
+
+    - name: scatterPlot
+      title: "Moran Scatter Plot"
+      type: Image
+      description: Scatter plot of standardized values vs. spatial lag.
+      renderFun: .renderScatterPlot
+      requiresData: true
+      visible: true
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+...

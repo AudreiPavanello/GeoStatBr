@@ -1,0 +1,82 @@
+---
+name: localmorantest
+title: Local Moran's I (LISA)
+jrs: '1.1'
+
+items:
+    - name: lisaTable
+      title: LISA Statistics by Region
+      type: Table
+      description: LISA results per region.
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - sigLevel
+          - nperm
+      columns:
+          - name: region
+            title: Region
+            type: text
+          - name: localI
+            title: Local I
+            type: number
+            format: zto,dp:4
+          - name: zScore
+            title: Z-Score
+            type: number
+            format: zto,dp:4
+          - name: pvalue
+            title: p-value
+            type: number
+            format: zto,pvalue
+          - name: cluster
+            title: Cluster Type
+            type: text
+
+    - name: clusterMap
+      title: LISA Cluster Map
+      type: Image
+      description: LISA cluster map.
+      renderFun: .renderClusterMap
+      requiresData: true
+      visible: true
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - sigLevel
+          - nperm
+
+    - name: sigMap
+      title: Significance Map
+      type: Image
+      description: Map showing regions by p-value significance level.
+      renderFun: .renderSigMap
+      requiresData: true
+      visible: true
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - sigLevel
+          - nperm
+
+    - name: interpretation
+      title: Interpretation
+      type: Html
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - weightsType
+          - kNeighbors
+          - sigLevel
+          - nperm
+...

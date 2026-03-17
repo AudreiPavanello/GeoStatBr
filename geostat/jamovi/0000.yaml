@@ -1,0 +1,50 @@
+---
+name: geostat
+title: Geospatial Analysis
+version: 0.1.0
+jms: '1.0'
+authors:
+  - Author Name
+maintainer: Author Name <author@example.com>
+date: '2026-03-16'
+type: Module
+description: >
+  Geospatial analysis tools for jamovi. Includes choropleth mapping and spatial
+  autocorrelation tests using built-in Brazilian geographic data (states and
+  Paraná municipalities). Designed for students with no coding experience.
+analyses:
+  - title: Choropleth Map
+    name: choropleth
+    ns: geostat
+    menuGroup: Geospatial
+    menuSubgroup: Maps
+    menuTitle: Choropleth Map
+    description: >
+      Create a choropleth map using Brazilian geographic data. Color-shades
+      regions by a numeric variable.
+    category: analyses
+  - title: Global Moran's I
+    name: morantest
+    ns: geostat
+    menuGroup: Geospatial
+    menuSubgroup: Spatial Autocorrelation
+    menuTitle: Global Moran's I
+    description: >
+      Test for global spatial autocorrelation. Reports the Moran's I statistic,
+      its expected value, variance, and p-value.
+    category: analyses
+  - title: Local Moran's I (LISA)
+    name: localmorantest
+    ns: geostat
+    menuGroup: Geospatial
+    menuSubgroup: Spatial Autocorrelation
+    menuTitle: Local Moran's I (LISA)
+    description: >
+      Identify local spatial clusters (High-High, Low-Low) and spatial outliers
+      (High-Low, Low-High) using LISA statistics.
+    category: analyses
+usesNativeEditor: false
+minApp: 1.2.0
+usesNative: true
+
+...

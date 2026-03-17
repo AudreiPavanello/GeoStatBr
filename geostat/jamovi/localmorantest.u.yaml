@@ -1,0 +1,96 @@
+name: localmorantest
+title: Local Moran's I (LISA)
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    name: variableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Variable
+        children:
+          - type: VariablesListBox
+            name: var
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Region Code Column
+        children:
+          - type: VariablesListBox
+            name: joinVar
+            maxItemCount: 1
+            isTarget: true
+  - type: CollapseBox
+    label: Options
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: Geographic Level
+            children:
+              - type: RadioButton
+                name: geoLevel_states
+                optionName: geoLevel
+                optionPart: states
+                label: Brazilian States
+              - type: RadioButton
+                name: geoLevel_mun_pr
+                optionName: geoLevel
+                optionPart: mun_pr
+                label: Paraná Municipalities
+          - type: Label
+            label: Spatial Weights
+            children:
+              - type: RadioButton
+                name: weightsType_queen
+                optionName: weightsType
+                optionPart: queen
+                label: Queen Contiguity
+              - type: RadioButton
+                name: weightsType_rook
+                optionName: weightsType
+                optionPart: rook
+                label: Rook Contiguity
+              - type: RadioButton
+                name: weightsType_knn
+                optionName: weightsType
+                optionPart: knn
+                label: K Nearest Neighbors
+          - type: Label
+            label: Number of Neighbors (K)
+            children: []
+          - type: Label
+            label: Significance Level
+            children:
+              - type: RadioButton
+                name: sigLevel_p05
+                optionName: sigLevel
+                optionPart: p05
+                label: '0.05'
+              - type: RadioButton
+                name: sigLevel_p01
+                optionName: sigLevel
+                optionPart: p01
+                label: '0.01'
+              - type: RadioButton
+                name: sigLevel_p001
+                optionName: sigLevel
+                optionPart: p001
+                label: '0.001'
+          - type: Label
+            label: Permutations
+            children:
+              - type: ComboBox
+                name: nperm
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: kNeighbors
+        format: number

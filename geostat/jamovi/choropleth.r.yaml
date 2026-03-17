@@ -1,0 +1,49 @@
+---
+name: choropleth
+title: Choropleth Map
+jrs: '1.1'
+
+items:
+    - name: map
+      title: Choropleth Map
+      type: Image
+      description: Color-shaded map of the selected variable by region.
+      renderFun: .renderMap
+      requiresData: true
+      visible: true
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - palette
+          - classMethod
+          - nClasses
+          - mapTitle
+
+    - name: summary
+      title: Summary by Region
+      type: Table
+      description: Value and class for each region.
+      clearWith:
+          - var
+          - joinVar
+          - geoLevel
+          - classMethod
+          - nClasses
+      columns:
+          - name: region
+            title: Region
+            type: text
+          - name: value
+            title: Value
+            type: number
+            format: zto,dp:3
+          - name: class
+            title: Class
+            type: integer
+
+    - name: warnings
+      title: Warnings
+      type: Html
+      visible: (showWarnings)
+...

@@ -1,0 +1,72 @@
+name: choropleth
+title: Choropleth Map
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    name: variableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Variable
+        children:
+          - type: VariablesListBox
+            name: var
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Region Code Column
+        children:
+          - type: VariablesListBox
+            name: joinVar
+            maxItemCount: 1
+            isTarget: true
+  - type: CollapseBox
+    label: Options
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: Geographic Level
+            children:
+              - type: RadioButton
+                name: geoLevel_states
+                optionName: geoLevel
+                optionPart: states
+                label: Brazilian States
+              - type: RadioButton
+                name: geoLevel_mun_pr
+                optionName: geoLevel
+                optionPart: mun_pr
+                label: Paraná Municipalities
+          - type: Label
+            label: Color Palette
+            children:
+              - type: ComboBox
+                name: palette
+          - type: Label
+            label: Classification Method
+            children:
+              - type: ComboBox
+                name: classMethod
+          - type: Label
+            label: Number of Classes
+            children: []
+          - type: Label
+            label: Map Title (optional)
+            children:
+              - type: TextBox
+                name: mapTitle
+                format: string
+                width: large
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: nClasses
+        format: number

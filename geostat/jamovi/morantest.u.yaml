@@ -1,0 +1,78 @@
+name: morantest
+title: Global Moran's I
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    name: variableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Variable
+        children:
+          - type: VariablesListBox
+            name: var
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Region Code Column
+        children:
+          - type: VariablesListBox
+            name: joinVar
+            maxItemCount: 1
+            isTarget: true
+  - type: CollapseBox
+    label: Options
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        children:
+          - type: Label
+            label: Geographic Level
+            children:
+              - type: RadioButton
+                name: geoLevel_states
+                optionName: geoLevel
+                optionPart: states
+                label: Brazilian States
+              - type: RadioButton
+                name: geoLevel_mun_pr
+                optionName: geoLevel
+                optionPart: mun_pr
+                label: Paraná Municipalities
+          - type: Label
+            label: Spatial Weights
+            children:
+              - type: RadioButton
+                name: weightsType_queen
+                optionName: weightsType
+                optionPart: queen
+                label: Queen Contiguity
+              - type: RadioButton
+                name: weightsType_rook
+                optionName: weightsType
+                optionPart: rook
+                label: Rook Contiguity
+              - type: RadioButton
+                name: weightsType_knn
+                optionName: weightsType
+                optionPart: knn
+                label: K Nearest Neighbors
+          - type: Label
+            label: Number of Neighbors (K)
+            children: []
+          - type: Label
+            label: Alternative Hypothesis
+            children:
+              - type: ComboBox
+                name: alternative
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: TextBox
+        name: kNeighbors
+        format: number

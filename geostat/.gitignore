@@ -1,0 +1,17 @@
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# jamovi build artifacts (auto-generated — do not commit)
+*.jmo
+build/
+inst/
+temp/
+R/*.h.R
+jamovi/*.src.js
+jamovi/*.js
+jamovi/jamovi.yaml
+jamovi/jamovi-full.yaml

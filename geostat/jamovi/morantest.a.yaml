@@ -1,0 +1,79 @@
+---
+name:      morantest
+title:     Global Moran's I
+menuGroup: Geospatial
+menuSubgroup: Spatial Autocorrelation
+menuTitle: Global Moran's I
+version:   '1.0.0'
+jas:       '1.2'
+
+description:
+    main: >
+        Test for global spatial autocorrelation. Reports the Moran's I
+        statistic, its expected value, variance, and p-value.
+
+completeWhenFilled: true
+
+options:
+    - name: data
+      type: Data
+
+    - name: var
+      title: Variable
+      type: Variable
+      suggested:
+          - continuous
+      permitted:
+          - numeric
+
+    - name: joinVar
+      title: Region Code Column
+      type: Variable
+      description: >
+          Column in your data containing the region identifier.
+      permitted:
+          - numeric
+          - factor
+          - id
+
+    - name: geoLevel
+      title: Geographic Level
+      type: List
+      options:
+          - title: Brazilian States
+            name: states
+          - title: "Paraná Municipalities"
+            name: mun_pr
+      default: states
+
+    - name: weightsType
+      title: Spatial Weights
+      type: List
+      options:
+          - title: Queen Contiguity
+            name: queen
+          - title: Rook Contiguity
+            name: rook
+          - title: K Nearest Neighbors
+            name: knn
+      default: queen
+
+    - name: kNeighbors
+      title: Number of Neighbors (K)
+      type: Integer
+      default: 4
+      min: 1
+      max: 20
+
+    - name: alternative
+      title: Alternative Hypothesis
+      type: List
+      options:
+          - title: Two-sided
+            name: two.sided
+          - title: Greater (positive autocorrelation)
+            name: greater
+          - title: Less (negative autocorrelation)
+            name: less
+      default: two.sided
+...
