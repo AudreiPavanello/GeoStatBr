@@ -4,7 +4,7 @@
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/AudreiPavanello/GeoStatBr/releases)
 [![License: GPL-3](https://img.shields.io/badge/license-GPL--3-green.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![jamovi](https://img.shields.io/badge/jamovi-%E2%89%A5%202.3-orange.svg)](https://www.jamovi.org)
+[![jamovi](https://img.shields.io/badge/jamovi-%E2%89%A5%202.7-orange.svg)](https://www.jamovi.org)
 
 ---
 
