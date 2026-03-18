@@ -24,7 +24,7 @@
 
 ## Installation
 
-[![Download](https://img.shields.io/badge/Download-.jmo-blue?style=for-the-badge)](https://github.com/AudreiPavanello/geostatbr/releases/latest)
+[![Download](https://img.shields.io/badge/Download-.jmo-blue?style=for-the-badge)](https://github.com/AudreiPavanello/GeoStatBr/releases/latest)
 
 1. Open **jamovi**.
 2. Click the **Modules** button in the top-right corner.
