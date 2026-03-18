@@ -24,11 +24,12 @@
 
 ## Installation
 
-1. Go to the [**Releases**](https://github.com/AudreiPavanello/geostatbr/releases) page and download the latest `.jmo` file.
-2. Open **jamovi**.
-3. Click the **Modules** button in the top-right corner.
-4. Select **Install from file…** and choose the downloaded `.jmo` file.
-5. The **GeoStatBR** menu will appear in the analysis ribbon.
+[![Download](https://img.shields.io/badge/Download-.jmo-blue?style=for-the-badge)](https://github.com/AudreiPavanello/geostatbr/releases/latest)
+
+1. Open **jamovi**.
+2. Click the **Modules** button in the top-right corner.
+3. Select **Install from file…** and choose the downloaded `.jmo` file.
+4. The **GeoStatBR** menu will appear in the analysis ribbon.
 
 ---
 
