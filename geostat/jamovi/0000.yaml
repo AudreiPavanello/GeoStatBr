@@ -1,21 +1,21 @@
 ---
-name: geostat
+name: geostatbr
 title: Geospatial Analysis
 version: 0.1.0
 jms: '1.0'
 authors:
-  - Author Name
-maintainer: Author Name <author@example.com>
+  - Audrei Pavanello
+maintainer: Audrei Pavanello <audrei.pavanello@outlook.com>
 date: '2026-03-16'
 type: Module
 description: >
   Geospatial analysis tools for jamovi. Includes choropleth mapping and spatial
   autocorrelation tests using built-in Brazilian geographic data (states and
-  Paraná municipalities). Designed for students with no coding experience.
+  Paraná municipalities)
 analyses:
   - title: Choropleth Map
     name: choropleth
-    ns: geostat
+    ns: geostatbr
     menuGroup: Geospatial
     menuSubgroup: Maps
     menuTitle: Choropleth Map
@@ -25,7 +25,7 @@ analyses:
     category: analyses
   - title: Global Moran's I
     name: morantest
-    ns: geostat
+    ns: geostatbr
     menuGroup: Geospatial
     menuSubgroup: Spatial Autocorrelation
     menuTitle: Global Moran's I
@@ -35,7 +35,7 @@ analyses:
     category: analyses
   - title: Local Moran's I (LISA)
     name: localmorantest
-    ns: geostat
+    ns: geostatbr
     menuGroup: Geospatial
     menuSubgroup: Spatial Autocorrelation
     menuTitle: Local Moran's I (LISA)
