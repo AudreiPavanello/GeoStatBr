@@ -8,17 +8,17 @@
 #' @return An sf object with IBGE region codes in the appropriate column.
 .load_builtin_shapefile <- function(level) {
     if (level == "states") {
-        shp <- geostat::brazil_states
+        shp <- geostatbr::brazil_states
         attr(shp, "id_col")   <- "code_state"
         attr(shp, "name_col") <- "name_state"
     } else if (level == "mun_pr") {
         # kept for backward compatibility
-        shp <- geostat::brazil_municipalities_pr
+        shp <- geostatbr::brazil_municipalities_pr
         attr(shp, "id_col")   <- "code_muni"
         attr(shp, "name_col") <- "name_muni"
     } else if (startsWith(level, "mun_")) {
         state_abbrev <- toupper(substr(level, 5, nchar(level)))
-        all_mun      <- geostat::brazil_municipalities_all
+        all_mun      <- geostatbr::brazil_municipalities_all
         shp          <- all_mun[all_mun$abbrev_state == state_abbrev, ]
         if (nrow(shp) == 0)
             stop("No municipalities found for state: ", state_abbrev)
